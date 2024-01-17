@@ -5,14 +5,14 @@ import {
   OneToMany,
   BaseEntity,
 } from 'typeorm';
-import { Metric } from './metric';
+import { Metric } from './metric.entity';
 
 @Entity({ name: 'metrictypes' })
 export class MetricType extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
+  @Column({ name: 'typename', length: 50 })
   typeName: string;
 
   @OneToMany(() => Metric, (metric) => metric.metricType)

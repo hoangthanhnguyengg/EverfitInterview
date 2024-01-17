@@ -6,8 +6,8 @@ import {
   JoinColumn,
   BaseEntity,
 } from 'typeorm';
-import { User } from './user';
-import { MetricType } from './metricType';
+import { User } from './user.entity';
+import { MetricType } from './metricType.entity';
 
 @Entity({ name: 'metrics' })
 export class Metric extends BaseEntity {

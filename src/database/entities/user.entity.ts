@@ -6,7 +6,7 @@ import {
   OneToMany,
   BaseEntity,
 } from 'typeorm';
-import { Metric } from './metric';
+import { Metric } from './metric.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {

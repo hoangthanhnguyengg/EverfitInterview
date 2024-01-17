@@ -13,6 +13,7 @@ import { Entities } from './entities';
       database: 'everfitDB',
       entities: [...Entities],
       synchronize: false, // Set to false in production
+      logging: true,
     }),
   ],
 })
