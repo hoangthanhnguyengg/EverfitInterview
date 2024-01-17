@@ -1,18 +1,13 @@
-import { getAllMetricDto } from './dto/request';
+import { AllMetricDto } from './dto/request';
 import { Metric } from '../../database/entities/metric.entity';
-import {
-  EntityRepository,
-  Repository,
-  createConnection,
-  getConnection,
-  getManager,
-} from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 
-@EntityRepository(Metric)
-export class MetricRepository extends Repository<Metric> {
-  async getAll(input: getAllMetricDto) {
+@Injectable()
+export class MetricRepository {
+  async getAll(input: AllMetricDto) {
     const result = await Metric.find();
-
+    const userId = 1;
     let manager;
 
     try {
@@ -23,16 +18,31 @@ export class MetricRepository extends Repository<Metric> {
       manager = connection.manager;
     }
 
-    const result2QueryBuilder = manager
+    console.log('inputinput', input);
+
+    const queryBuilder = manager
       .createQueryBuilder(Metric, 'metrics')
       .leftJoinAndSelect('metrics.metricType', 'metricType')
-      .where('metrics.userID = :userId', { userId: 1 });
+      .where('metrics.userID = :userId', { userId });
 
-    const result2 = await result2QueryBuilder.getMany();
+    if (input.type) {
+      queryBuilder.andWhere('metrics.metricType.id = :type', {
+        type: input.type,
+      });
+    }
 
-    console.log('result2', result2);
+    if (input.startAt) {
+      queryBuilder.andWhere('metrics.date >= :startAt', {
+        startAt: input.startAt,
+      });
+    }
 
-    console.log('result', result);
+    if (input.endAt) {
+      queryBuilder.andWhere('metrics.date <= :endAt', { endAt: input.endAt });
+    }
+
+    //const result2 = await queryBuilder.getMany();
+
     return result;
   }
 }

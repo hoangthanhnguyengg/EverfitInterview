@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { MetricRepository } from './metric.repository';
-import { getAllMetricDto } from './dto/request';
-import { InjectRepository } from '@nestjs/typeorm';
+import { AllMetricDto } from './dto/request';
 
 @Injectable()
 export class MetricService {
-  constructor(
-    @InjectRepository(MetricRepository) private repository: MetricRepository,
-  ) {}
+  constructor(private repository: MetricRepository) {}
 
-  async getAll(input: getAllMetricDto) {
+  async getAll(input: AllMetricDto) {
     return await this.repository.getAll(input);
   }
 }

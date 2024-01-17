@@ -20,6 +20,24 @@ CREATE TABLE
         FOREIGN KEY (MetricTypeID) REFERENCES MetricTypes (id)
     );
 
+CREATE TABLE
+    IF NOT EXISTS Units (
+        id INT PRIMARY KEY, 
+        MetricTypeID INT, 
+        Name VARCHAR(50) NOT NULL, 
+        FOREIGN KEY (MetricTypeID) REFERENCES MetricTypes (id)
+    );
+
+INSERT INTO Units (id, name, metricTypeId) VALUES
+    ( 1,'Meter', 1),
+    ( 2,'Centimeter', 1),
+    ( 3,'Inch', 1),
+    ( 4,'Feet', 1),
+    ( 5,'Yard', 1),
+    ( 6,'C', 2),
+    ( 7,'F', 2),
+    ( 8,'K', 2);
+
 INSERT INTO
     Users (id, Username, Password, CreatedAt)
 VALUES

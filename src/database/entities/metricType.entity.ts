@@ -6,6 +6,7 @@ import {
   BaseEntity,
 } from 'typeorm';
 import { Metric } from './metric.entity';
+import { Unit } from './unit.entity';
 
 @Entity({ name: 'metrictypes' })
 export class MetricType extends BaseEntity {
@@ -16,5 +17,8 @@ export class MetricType extends BaseEntity {
   typeName: string;
 
   @OneToMany(() => Metric, (metric) => metric.metricType)
-  metrics: Metric[]; // Define the 'metrics' property
+  metrics: Metric[];
+
+  @OneToMany(() => Unit, (unit) => unit.metricType)
+  units: Unit[];
 }

@@ -1,18 +1,13 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { MetricService } from './metric.service';
-import { getAllMetricDto } from './dto/request';
+import { AllMetricDto } from './dto/request';
 
 @Controller('/metric')
 export class MetricResolver {
   constructor(private service: MetricService) {}
 
-  @Get()
-  async find() {
-    return 'oki';
-  }
-
   @Get('/getAll')
-  async getAll(@Query() input: getAllMetricDto) {
+  async getAll(@Query() input: AllMetricDto) {
     return await this.service.getAll(input);
   }
 }

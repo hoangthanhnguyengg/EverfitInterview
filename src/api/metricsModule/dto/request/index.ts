@@ -1,7 +1,13 @@
 import { Transform } from 'class-transformer';
-import { IsDate, IsOptional } from 'class-validator';
+import { IsDate, IsOptional, Validate } from 'class-validator';
+import { MetricValidator } from '../../validator/metric.input.validator';
 
-export class getAllMetricDto {
+export class AllMetricDto {
+  @Validate(MetricValidator, {
+    message: `User is invalid input.`,
+  })
+  userId: number;
+
   @IsOptional()
   @Transform(({ value }) => new Date(value))
   @IsDate()
