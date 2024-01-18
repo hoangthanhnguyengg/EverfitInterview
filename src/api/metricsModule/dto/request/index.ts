@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsDate, IsOptional, Validate } from 'class-validator';
+import { IsDate, IsOptional, Validate, IsNumber } from 'class-validator';
 import { UserValidator } from '../../validator/metric.input.validator';
 import { MetricTypeValidator } from '../../validator/metricType.input.validator';
 
@@ -29,8 +29,23 @@ export class AllMetricDto {
   unit?: number; // (Meter, centimeter, inch, feet, yard) or (°C, °F, °K)
 }
 
-export class addNewMetricDto {
+export class CreateMetricDto {
+  @Validate(UserValidator, {
+    message: `User is invalid input.`,
+  })
+  userId: number;
+
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
   date: Date;
+
+  @IsNumber()
   value: number;
-  unit: number;
+
+  @Validate(MetricTypeValidator, {
+    message: `Metric Type is invalid input.`,
+  })
+  type: number; // type metric (Distance / Temperature)
+
+  unit: number; // (Meter, centimeter, inch, feet, yard) or (°C, °F, °K)
 }

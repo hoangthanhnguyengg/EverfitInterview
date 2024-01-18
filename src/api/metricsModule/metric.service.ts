@@ -1,22 +1,24 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { MetricRepository } from './metric.repository';
-import { AllMetricDto } from './dto/request';
+import { AllMetricDto, CreateMetricDto } from './dto/request';
 import {
   MetricType,
   typeValidTemperatureUnits,
   validDistanceUnits,
 } from 'src/common/constants';
-import { Metric } from 'src/database/entities/metric.entity';
 import {
-  convertDistance,
-  convertTemperature,
+  convertDistanceFromCentimeters,
+  convertDistanceToCentimeters,
+  convertTemperatureFromCelsius,
+  convertTemperatureToCelsius,
 } from 'src/common/utils/caculation';
+import { MetricResponse } from './dto/response';
 
 @Injectable()
 export class MetricService {
   constructor(private repository: MetricRepository) {}
 
-  async getAll(input: AllMetricDto) {
+  async getAll(input: AllMetricDto): Promise<MetricResponse[]> {
     //*** Begin validate Time ***//
     if (input.startAt && input.endAt) {
       const startDate = new Date(input.startAt);
@@ -34,15 +36,15 @@ export class MetricService {
       const units = await this.repository.getMetricTypeAndUnit(input.type);
 
       if (input.unit) {
-        //*** Check unit is valid ***//
+        //*** Check unit is valid and convert to required unit***//
         const validUnit = units.find((item) => item.id === Number(input.unit));
 
         if (validUnit) {
           if (validUnit.metricType.typeName == MetricType.DISTANCE) {
             result = result.map((item) => {
-              const res: Metric = {
+              const res = {
                 ...item,
-                value: convertDistance(
+                value: convertDistanceFromCentimeters(
                   item.value,
                   validUnit.name as validDistanceUnits,
                 ),
@@ -54,9 +56,9 @@ export class MetricService {
 
           if (validUnit.metricType.typeName == MetricType.TEMPERATURE) {
             result = result.map((item) => {
-              const res: Metric = {
+              const res = {
                 ...item,
-                value: convertTemperature(
+                value: convertTemperatureFromCelsius(
                   item.value,
                   validUnit.name as typeValidTemperatureUnits,
                 ),
@@ -73,5 +75,43 @@ export class MetricService {
     //*** End validate type & unit ***//
 
     return result;
+  }
+
+  async createOne(input: CreateMetricDto) {
+    let convertUnitValue = input;
+    if (input.type) {
+      const units = await this.repository.getMetricTypeAndUnit(input.type);
+
+      if (input.unit) {
+        //*** Check unit is valid and convert to centimeters***//
+        const validUnit = units.find((item) => item.id === Number(input.unit));
+
+        if (validUnit) {
+          if (validUnit.metricType.typeName == MetricType.TEMPERATURE) {
+            convertUnitValue = {
+              ...convertUnitValue,
+              value: convertTemperatureToCelsius(
+                convertUnitValue.value,
+                validUnit.name as typeValidTemperatureUnits,
+              ),
+            };
+          }
+
+          if (validUnit.metricType.typeName == MetricType.DISTANCE) {
+            convertUnitValue = {
+              ...convertUnitValue,
+              value: convertDistanceToCentimeters(
+                convertUnitValue.value,
+                validUnit.name as validDistanceUnits,
+              ),
+            };
+          }
+        } else {
+          throw new BadRequestException('Unit is not valid with metric Type');
+        }
+      }
+    }
+
+    return await this.repository.createOne(convertUnitValue);
   }
 }

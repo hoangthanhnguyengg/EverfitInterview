@@ -12,7 +12,7 @@ export class MetricTypeValidator implements ValidatorConstraintInterface {
   async validate(input?: number, _validationArguments?: ValidationArguments) {
     if (input) {
       // check type is valid
-      const metricType = await MetricType.findOneById(input);
+      const metricType = await MetricType.findOne(input);
       if (metricType) {
         return true;
       }

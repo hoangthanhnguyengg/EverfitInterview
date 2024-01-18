@@ -1,17 +1,17 @@
 CREATE TABLE
     IF NOT EXISTS Users (
-        id INT PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         Username VARCHAR(50) NOT NULL,
         Password VARCHAR(255) NOT NULL,
         CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
 CREATE TABLE
-    IF NOT EXISTS MetricTypes (id INT PRIMARY KEY, TypeName VARCHAR(50) NOT NULL);
+    IF NOT EXISTS MetricTypes (id SERIAL PRIMARY KEY, TypeName VARCHAR(50) NOT NULL);
 
 CREATE TABLE
     IF NOT EXISTS Metrics (
-        id INT PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         UserID INT,
         MetricTypeID INT,
         Date DATE,
@@ -22,12 +22,18 @@ CREATE TABLE
 
 CREATE TABLE
     IF NOT EXISTS Units (
-        id INT PRIMARY KEY, 
+        id SERIAL PRIMARY KEY, 
         MetricTypeID INT, 
         Name VARCHAR(50) NOT NULL, 
         FOREIGN KEY (MetricTypeID) REFERENCES MetricTypes (id)
     );
 
+INSERT INTO
+    MetricTypes (id, TypeName)
+VALUES
+    (1, 'Distance'),
+    (2, 'Temperature');
+    
 INSERT INTO Units (id, name, metricTypeId) VALUES
     ( 1,'Meter', 1),
     ( 2,'Centimeter', 1),
@@ -43,12 +49,6 @@ INSERT INTO
 VALUES
     (1, 'hoang', 'abcdef', CURRENT_TIMESTAMP),
     (2, 'huy', '123456', CURRENT_TIMESTAMP);
-
-INSERT INTO
-    MetricTypes (id, TypeName)
-VALUES
-    (1, 'Distance'),
-    (2, 'Temperature');
 
 -- Thêm 5 bản ghi cho người dùng 1
 INSERT INTO

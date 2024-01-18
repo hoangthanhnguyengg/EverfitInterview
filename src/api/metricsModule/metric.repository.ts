@@ -1,12 +1,13 @@
-import { AllMetricDto } from './dto/request';
+import { AllMetricDto, CreateMetricDto } from './dto/request';
 import { Metric } from '../../database/entities/metric.entity';
 import { createConnection, getConnection } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { Unit } from 'src/database/entities/unit.entity';
+import { MetricResponse } from './dto/response';
 
 @Injectable()
 export class MetricRepository {
-  async getAll(input: AllMetricDto) {
+  async getAll(input: AllMetricDto): Promise<MetricResponse[]> {
     const userId = 1;
     let manager;
 
@@ -52,5 +53,18 @@ export class MetricRepository {
     });
 
     return units;
+  }
+
+  async createOne(input: CreateMetricDto): Promise<MetricResponse> {
+    let result = new MetricResponse();
+    const payload = Metric.create({
+      userID: input.userId,
+      metricTypeID: input.type,
+      date: input.date,
+      value: input.value,
+    });
+
+    result = await Metric.save(payload);
+    return result;
   }
 }

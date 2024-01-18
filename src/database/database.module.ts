@@ -10,7 +10,7 @@ import { Entities } from './entities';
       port: 5432,
       username: 'postgres',
       password: '14121999aA*',
-      database: 'everfitDB',
+      database: 'localdb',
       entities: [...Entities],
       synchronize: false, // Set to false in production
       logging: true,

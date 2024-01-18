@@ -5,13 +5,15 @@ import {
   ManyToOne,
   JoinColumn,
   BaseEntity,
+  Index,
 } from 'typeorm';
 import { User } from './user.entity';
 import { MetricType } from './metricType.entity';
 
 @Entity({ name: 'metrics' })
 export class Metric extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'id' })
+  @Index({ unique: true })
   id: number;
 
   @Column({ name: 'userid' })

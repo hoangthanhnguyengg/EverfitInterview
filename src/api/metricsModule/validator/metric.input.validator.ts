@@ -10,10 +10,9 @@ import { User } from 'src/database/entities/user.entity';
 @ValidatorConstraint({})
 export class UserValidator implements ValidatorConstraintInterface {
   async validate(input?: number, _validationArguments?: ValidationArguments) {
-    console.log('input', input);
     if (input) {
       // check user is exist
-      const user = await User.findOneById(input);
+      const user = await User.findOne(input);
       if (user) {
         return true;
       }
