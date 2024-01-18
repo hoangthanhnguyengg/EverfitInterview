@@ -4,11 +4,12 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { MetricType } from './metricType.entity';
 
 @Entity({ name: 'units' })
-export class Unit {
+export class Unit extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

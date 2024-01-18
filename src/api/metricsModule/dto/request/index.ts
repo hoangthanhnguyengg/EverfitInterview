@@ -1,9 +1,10 @@
 import { Transform } from 'class-transformer';
 import { IsDate, IsOptional, Validate } from 'class-validator';
-import { MetricValidator } from '../../validator/metric.input.validator';
+import { UserValidator } from '../../validator/metric.input.validator';
+import { MetricTypeValidator } from '../../validator/metricType.input.validator';
 
 export class AllMetricDto {
-  @Validate(MetricValidator, {
+  @Validate(UserValidator, {
     message: `User is invalid input.`,
   })
   userId: number;
@@ -19,6 +20,9 @@ export class AllMetricDto {
   endAt?: Date;
 
   @IsOptional()
+  @Validate(MetricTypeValidator, {
+    message: `Metric Type is invalid input.`,
+  })
   type?: number; // type metric (Distance / Temperature)
 
   @IsOptional()

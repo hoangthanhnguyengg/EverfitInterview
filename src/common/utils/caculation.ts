@@ -16,13 +16,13 @@ export const convertTemperature = (
 
 export const convertDistance = (
   centimeters: number,
-  toUnit: 'meter' | 'inch' | 'feet' | 'yard',
+  toUnit: 'Meter' | 'Inch' | 'Feet' | 'Yard',
 ): number => {
   const conversionFactors = {
-    meter: 0.01,
-    inch: 0.393701,
-    feet: 0.0328084,
-    yard: 0.0109361,
+    Meter: 0.01,
+    Inch: 0.393701,
+    Feet: 0.0328084,
+    Yard: 0.0109361,
   };
 
   if (conversionFactors.hasOwnProperty(toUnit)) {

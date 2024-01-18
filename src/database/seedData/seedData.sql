@@ -47,8 +47,8 @@ VALUES
 INSERT INTO
     MetricTypes (id, TypeName)
 VALUES
-    (1, 'Temperature'),
-    (2, 'Distance');
+    (1, 'Distance'),
+    (2, 'Temperature');
 
 -- Thêm 5 bản ghi cho người dùng 1
 INSERT INTO

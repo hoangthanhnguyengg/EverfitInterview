@@ -2,23 +2,21 @@ import { AllMetricDto } from './dto/request';
 import { Metric } from '../../database/entities/metric.entity';
 import { createConnection, getConnection } from 'typeorm';
 import { Injectable } from '@nestjs/common';
+import { Unit } from 'src/database/entities/unit.entity';
 
 @Injectable()
 export class MetricRepository {
   async getAll(input: AllMetricDto) {
-    const result = await Metric.find();
     const userId = 1;
     let manager;
 
     try {
-      manager = getConnection().manager; // Thử lấy manager từ kết nối hiện tại
+      manager = getConnection().manager; // get defautl connection
     } catch (error) {
-      // Nếu không có kết nối, tạo một kết nối mới
+      // if this connection is not exist, create new one
       const connection = await createConnection();
       manager = connection.manager;
     }
-
-    console.log('inputinput', input);
 
     const queryBuilder = manager
       .createQueryBuilder(Metric, 'metrics')
@@ -41,8 +39,18 @@ export class MetricRepository {
       queryBuilder.andWhere('metrics.date <= :endAt', { endAt: input.endAt });
     }
 
-    //const result2 = await queryBuilder.getMany();
-
+    const result = await queryBuilder.getMany();
     return result;
+  }
+
+  async getMetricTypeAndUnit(metricTypeId: number): Promise<Unit[]> {
+    const units = await Unit.find({
+      where: {
+        metricTypeID: metricTypeId,
+      },
+      relations: ['metricType'],
+    });
+
+    return units;
   }
 }

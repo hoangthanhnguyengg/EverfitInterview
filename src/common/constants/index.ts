@@ -5,9 +5,17 @@ export enum TemperatureEnum {
 }
 
 export enum DistanceEnum {
-  CENTIMETER = 'centimeter',
-  METER = 'meter',
-  INCH = 'inch',
-  FEET = 'feet',
-  YARD = 'yard',
+  CENTIMETER = 'Centimeter',
+  METER = 'Meter',
+  INCH = 'Inch',
+  FEET = 'Feet',
+  YARD = 'Yard',
 }
+
+export enum MetricType {
+  TEMPERATURE = 'Temperature',
+  DISTANCE = 'Distance',
+}
+
+export type validDistanceUnits = 'Meter' | 'Inch' | 'Feet' | 'Yard';
+export type typeValidTemperatureUnits = 'F' | 'K';

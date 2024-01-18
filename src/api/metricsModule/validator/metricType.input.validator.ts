@@ -4,22 +4,22 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { AllMetricDto } from '../dto/request';
+import { MetricType } from 'src/database/entities/metricType.entity';
 import { User } from 'src/database/entities/user.entity';
 
 @ValidatorConstraint({})
-export class UserValidator implements ValidatorConstraintInterface {
+export class MetricTypeValidator implements ValidatorConstraintInterface {
   async validate(input?: number, _validationArguments?: ValidationArguments) {
-    console.log('input', input);
     if (input) {
-      // check user is exist
-      const user = await User.findOneById(input);
-      if (user) {
+      // check type is valid
+      const metricType = await MetricType.findOneById(input);
+      if (metricType) {
         return true;
       }
+
       return false;
     }
 
-    return false;
+    return true;
   }
 }
