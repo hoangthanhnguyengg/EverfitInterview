@@ -27,6 +27,9 @@ export class AllMetricDto {
 
   @IsOptional()
   unit?: number; // (Meter, centimeter, inch, feet, yard) or (°C, °F, °K)
+
+  @IsOptional()
+  latest?: boolean; // Specify latest metric in one day 
 }
 
 export class CreateMetricDto {
