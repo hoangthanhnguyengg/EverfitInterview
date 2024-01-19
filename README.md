@@ -4,9 +4,9 @@
 ```
 yarn
 ```
-2. Thêm config vào cấu hình db: 
+2. Thêm config vào cấu hình db và chạy file sql để seed data: 
 ``` 
-src\database\database.module.ts
+src\database\database.module.ts 
 
 {
       type: 'postgres', // Use 'postgres' for postgres
