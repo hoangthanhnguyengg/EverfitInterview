@@ -40,7 +40,24 @@ export class MetricRepository {
       queryBuilder.andWhere('metrics.date <= :endAt', { endAt: input.endAt });
     }
 
+    ///*** GET LATEST METRIC RECORD IN ONE DAY */
+    const subQuery = manager
+      .createQueryBuilder(Metric, 'subMetrics')
+      .select('MAX(subMetrics.id)', 'maxId')
+      .where('subMetrics.userID = metrics.userID')
+      .andWhere('subMetrics.date BETWEEN :startAt AND :endAt', {
+        startAt: input.startAt,
+        endAt: input.endAt,
+      })
+      .groupBy('subMetrics.date');
+
+    queryBuilder
+      .andWhere('metrics.id IN (' + subQuery.getQuery() + ')')
+      .setParameters(subQuery.getParameters());
+    ///*** END GET LATEST METRIC RECORD IN ONE DAY */
+
     const result = await queryBuilder.getMany();
+
     return result;
   }
 
